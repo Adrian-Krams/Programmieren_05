@@ -8,19 +8,18 @@ import highlighting.ui.EditorUI;
 
 public class Main {
 
-  public static void main(String... args) {
-    // Phase I: RegexHighlighter
-    SyntaxHighlighter regex = new RegexHighlighter();
+    public static void main(String... args) {
 
-    // Phase II: ScanningHighlighter
-    SyntaxHighlighter scanning = new ScanningHighlighter();
+        // Phase I: RegexHighlighter
+        SyntaxHighlighter regex = new RegexHighlighter();
 
-    // Phase III: AntlrTokenCollector (tokenbasiert)
-    SyntaxHighlighter antlrToken = new AntlrTokenCollector();
+        // Phase II: ScanningHighlighter
+        SyntaxHighlighter scanning = new ScanningHighlighter();
 
-    // and go ...
-    EditorUI.show(Texts.START_TEXT, regex);
-    EditorUI.show(Texts.START_TEXT, scanning);
-    // EditorUI.show(Texts.START_TEXT, antlrToken);
-  }
+        // Phase III: AntlrTokenCollector
+        SyntaxHighlighter antlrToken = new AntlrTokenCollector();
+
+        // Nur ANTLR-Variante anzeigen
+        EditorUI.show(Texts.START_TEXT, antlrToken);
+    }
 }
