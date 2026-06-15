@@ -1,25 +1,33 @@
 package highlighting;
 
 import highlighting.antlr.*;
-import highlighting.core.SyntaxHighlighter;
-import highlighting.presets.Texts;
-import highlighting.regex.*;
-import highlighting.ui.EditorUI;
+import org.antlr.v4.runtime.*;
+
+import java.util.Scanner;
 
 public class Main {
 
     public static void main(String... args) {
 
-        // Phase I: RegexHighlighter
-        SyntaxHighlighter regex = new RegexHighlighter();
+        String code = """
+        public class Test{private int x;public void run(){if(x){return;}while(x){x=x;}}}
+        """;
 
-        // Phase II: ScanningHighlighter
-        SyntaxHighlighter scanning = new ScanningHighlighter();
+        Scanner scanner = new Scanner(System.in);
 
-        // Phase III: AntlrTokenCollector
-        SyntaxHighlighter antlrToken = new AntlrTokenCollector();
+        System.out.print("Einrueckung eingeben, z.B. 2 oder 4: ");
+        int indentWidth = scanner.nextInt();
 
-        // Nur ANTLR-Variante anzeigen
-        EditorUI.show(Texts.START_TEXT, antlrToken);
+        MiniJavaLexer lexer = new MiniJavaLexer(CharStreams.fromString(code));
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        MiniJavaParser parser = new MiniJavaParser(tokens);
+
+        MiniJavaParser.CompilationUnitContext tree = parser.compilationUnit();
+
+        PrettyPrinterVisitor visitor = new PrettyPrinterVisitor(indentWidth);
+        visitor.visit(tree);
+
+        System.out.println("----- Pretty Printer Ausgabe -----");
+        System.out.println(visitor.result());
     }
 }
